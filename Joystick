@@ -1,0 +1,169 @@
+import com.gsc.input.Joystick;
+
+/**
+*
+
+@author GSC
+*/
+public class Joystick {
+
+//---------------------------------------------------------------
+// MEMBERS
+//---------------------------------------------------------------
+
+// Class Constants
+public final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3,
+BUTTON1 = 0, BUTTON2 = 1, BUTTON3 = 2, BUTTON4 = 3,
+BUTTON5 = 4, BUTTON6 = 5, BUTTON7 = 6, BUTTON8 = 7,
+BUTTON9 = 8, BUTTON10 = 9, BUTTON11 = 10, BUTTON12 = 11;
+
+// Variable members
+public boolean abAxis[] = {false, false, false, false};
+public boolean abButtons[] = {false, false, false, false, false,
+false, false, false, false, false,
+false, false };
+private boolean bPressedButton = false;
+
+//---------------------------------------------------------------
+// CONSTRUCTOR
+//---------------------------------------------------------------
+public Joystick()
+{
+}
+
+public boolean isPressDown(){
+  if ( isButtonPressDown() )
+    return true;
+  if ( isAxisPressDown() )
+    return true;
+  return false;
+}
+
+/**
+
+@return
+*/
+public boolean isAxisPressDown(){
+  int I = 0;
+  while ( I < abAxis.length )
+  {
+    if ( abAxis[ I ] )
+      return true;
+    I++;
+  }
+  return false;
+}
+
+/**
+
+@return
+*/
+public boolean isButtonPressDown(){
+  int I = 0;
+  while ( I < abButtons.length )
+  {
+    if ( abButtons[ I ] )
+      return true;
+    I++;
+  }
+  return false;
+}
+
+//---------------------------------------------------------------
+// Is Available
+//---------------------------------------------------------------
+/* public boolean isAvailable ()
+{
+  return (pJoy != null);
+}
+*/
+public void NoHayPulsados(int nDir){
+  abAxis[ nDir ] = false;
+}
+//---------------------------------------------------------------
+// getAxis (UP, DOWN, LEFT, RIGHT)
+//---------------------------------------------------------------
+public boolean getAxis ( Joystick pJoy, int nDir)
+{
+  boolean HaPulsado = abAxis[nDir];
+  abAxis[ nDir ] = false;
+  return pJoy != null && HaPulsado;
+}
+
+//---------------------------------------------------------------
+// getAxisAlt (UP, DOWN, LEFT, RIGHT) resets the direction
+//---------------------------------------------------------------
+public boolean getAxisAlt ( Joystick pJoy, int nDir)
+{
+  boolean bRet = pJoy != null && abAxis[nDir];
+
+  if (bRet)
+    abAxis[nDir] = false;
+  return bRet;
+}
+
+//---------------------------------------------------------------
+// getButton (BUTTON1..12)
+//---------------------------------------------------------------
+public boolean getButton ( Joystick pJoy, int nButton)
+{
+  boolean bHasPressed = abButtons[nButton];
+  
+  abButtons[ nButton ] = false;
+  bPressedButton = false;
+  return pJoy != null && bHasPressed;
+}
+
+//---------------------------------------------------------------
+// getButtonAlt (BUTTON1..12) resets the button
+//---------------------------------------------------------------
+public boolean getButtonAlt ( Joystick pJoy, int nButton )
+{
+  boolean bRet = pJoy != null && abButtons[nButton];
+  
+  if (bRet)
+    abButtons[nButton] = false;
+  return bRet;
+}
+
+//---------------------------------------------------------------
+// Event: joystickAxisChanged
+//---------------------------------------------------------------
+public void setAxiPress( Joystick pJoy )
+{
+  if (pJoy == null)
+    return;
+  if ( pJoy.getY()==-1.0 || pJoy.getY()==1.0 || pJoy.getX() == 1.0 || pJoy.getX() == -1.0 )
+  {
+    abAxis[UP] = pJoy.getY()==-1.0;
+    abAxis[DOWN] = pJoy.getY()==1.0;
+    abAxis[RIGHT] = pJoy.getX() == 1.0;
+    abAxis[LEFT] = pJoy.getX() == -1.0;
+  }
+}
+
+//---------------------------------------------------------------
+// Event: joystickButtonChanged
+//---------------------------------------------------------------
+public void setButtonPress( Joystick pJoy )
+{
+  if (pJoy == null)
+    return;
+  if ( !bPressedButton )
+  {
+    abButtons[BUTTON1] = (pJoy.getButtons() & Joystick.BUTTON1) != 0;
+    abButtons[BUTTON2] = (pJoy.getButtons() & Joystick.BUTTON2) != 0;
+    abButtons[BUTTON3] = (pJoy.getButtons() & Joystick.BUTTON3) != 0;
+    abButtons[BUTTON4] = (pJoy.getButtons() & Joystick.BUTTON4) != 0;
+    abButtons[BUTTON5] = (pJoy.getButtons() & Joystick.BUTTON5) != 0;
+    abButtons[BUTTON6] = (pJoy.getButtons() & Joystick.BUTTON6) != 0;
+    abButtons[BUTTON7] = (pJoy.getButtons() & Joystick.BUTTON7) != 0;
+    abButtons[BUTTON8] = (pJoy.getButtons() & Joystick.BUTTON8) != 0;
+    abButtons[BUTTON9] = (pJoy.getButtons() & Joystick.BUTTON9) != 0;
+    abButtons[BUTTON10] = (pJoy.getButtons() & Joystick.BUTTON10) != 0;
+    abButtons[BUTTON11] = (pJoy.getButtons() & Joystick.BUTTON11) != 0;
+    abButtons[BUTTON12] = (pJoy.getButtons() & Joystick.BUTTON12) != 0;
+    bPressedButton = true;
+  }
+}
+}
